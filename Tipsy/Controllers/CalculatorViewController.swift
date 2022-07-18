@@ -9,6 +9,7 @@
 import UIKit
 
 class CalculatorViewController: UIViewController {
+    var calculatorBrain = CalculatorBrain()
 
     @IBOutlet weak var billTextField: UITextField!
     @IBOutlet weak var zeroPctButton: UIButton!
@@ -17,15 +18,41 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var splitNumberLabel: UILabel!
 
     @IBAction func tipChanged(_ sender: Any) {
+        billTextField.endEditing(true)
+        zeroPctButton.isSelected = false
+        tenPctButton.isSelected = false
+        twentyPctButton.isSelected = false
+        let activeButton = sender as! UIButton
+
+        activeButton.isSelected = true
+
+        let value = activeButton.titleLabel?.text
+
+        calculatorBrain.setSelectedTipPct(pctString: value! )
+
     }
 
     @IBAction func stapperValueChanged(_ sender: UIStepper) {
+        billTextField.endEditing(true)
+        calculatorBrain.splitNumber = Int(sender.value)
+        splitNumberLabel.text = calculatorBrain.getSplitNumberText()
     }
+
 
     @IBAction func calculatePressed(_ sender: UIButton) {
+        billTextField.endEditing(true)
+        calculatorBrain.billTotal = Float(billTextField.text ?? "0.0")
+
+        print(calculatorBrain.splitTheBill())
     }
 
-    
+
+
+    override func viewDidLoad() {
+        calculatorBrain.splitNumber = 2
+        calculatorBrain.billTotal = 100
+
+    }
 
     /*
     // MARK: - Navigation
