@@ -10,17 +10,24 @@ import UIKit
 
 class ResultsViewController: UIViewController {
 
+    var totalPrPersonValue:String?
+    var splitNumber:String?
+    var tipPercent:String?
+
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        totalLabel.text = totalPrPersonValue ?? "could not be calculated"
+        settingsLabel.text = "Split between \(splitNumber ?? "unknown amount of") people, with \(tipPercent ?? "unknown")% tip."
+
     }
 
 
     @IBAction func recalculatePressed(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
     
 

@@ -16,9 +16,16 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var tenPctButton: UIButton!
     @IBOutlet weak var twentyPctButton: UIButton!
     @IBOutlet weak var splitNumberLabel: UILabel!
+    @IBOutlet weak var splitNumberStepper: UIStepper!
+
+    @IBAction func billTotalTextFieldChanged(_ sender: UITextField) {
+        calculatorBrain.billTotal = Float(billTextField.text ?? "0.0")
+
+    }
 
     @IBAction func tipChanged(_ sender: Any) {
         billTextField.endEditing(true)
+
         zeroPctButton.isSelected = false
         tenPctButton.isSelected = false
         twentyPctButton.isSelected = false
@@ -41,27 +48,34 @@ class CalculatorViewController: UIViewController {
 
     @IBAction func calculatePressed(_ sender: UIButton) {
         billTextField.endEditing(true)
-        calculatorBrain.billTotal = Float(billTextField.text ?? "0.0")
+        performSegue(withIdentifier: "showResult", sender: self)
 
-        print(calculatorBrain.splitTheBill())
     }
 
 
 
     override func viewDidLoad() {
-        calculatorBrain.splitNumber = 2
-        calculatorBrain.billTotal = 100
+        calculatorBrain.billTotal = 0
+        calculatorBrain.setSelectedTipPct(pctString: tenPctButton.titleLabel?.text ?? "0")
+        calculatorBrain.splitNumber = Int(splitNumberStepper.value)
+
+        billTextField.text = "\(calculatorBrain.billTotal ?? 0.0)"
+        splitNumberLabel.text = (calculatorBrain.getSplitNumberText())
+        
 
     }
 
-    /*
+
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     if segue.identifier == "showResult" {
+     let  destinationVC = segue.destination as! ResultsViewController
+         destinationVC.splitNumber = calculatorBrain.getSplitNumberText()
+         destinationVC.tipPercent = calculatorBrain.getSelectedTipPct()
+         destinationVC.totalPrPersonValue = calculatorBrain.splitTheBill()
+
+     }
+     }
 
 }

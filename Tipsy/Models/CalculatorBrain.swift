@@ -44,6 +44,11 @@ struct CalculatorBrain {
         return String(format: "%.2f", evalValue)
     }
 
+    func getSelectedTipPct()->String{
+        let evalValue = selectedTipPct ?? 0.0
+        return String(format: "%.2f", evalValue)
+    }
+
     mutating func setSelectedTipPct(pctString:String){
         let cleanedResultString = pctString.replacingOccurrences(of: "%", with: "")
         let result = Float(cleanedResultString)
